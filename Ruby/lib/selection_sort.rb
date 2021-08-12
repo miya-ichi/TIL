@@ -3,7 +3,9 @@ def selection_sort(array)
     min_index = n
 
     (n + 1).upto(array.size - 1) do |m|
-      min_index = array[min_index] < array[m] ? min_index : m
+      if array[m] < array[min_index]
+        min_index = m
+      end
     end
 
     array[n], array[min_index] = array[min_index], array[n]
