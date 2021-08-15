@@ -137,3 +137,36 @@ https://railsguides.jp/asset_pipeline.html
 どうでもいいけどここのChapter眠たかった・・・
 
 ## Chapter7 機能を追加してみよう
+### 新規登録を行う際に確認画面を表示する
+コントローラとモデル・ビューのコードでの関連がよくわからなくなった。
+- 要復習
+### 検索機能を追加
+タスクの検索機能を追加する。  
+- RansackというGemを利用する。
+### メール送信機能を追加
+- mailerを実装
+- テンプレートの実装
+
+実際に動作しているかの確認にMailCatcherというGemを利用する
+- 最初はインストール失敗してしまった
+  - https://github.com/sj26/mailcatcher
+  - `gem install thin -v 1.5.1 -- --with-cflags="-Wno-error=implicit-function-declaration"`
+  - 上記コマンド実行後に再インストールでうまくいった
+
+### ファイルのアップロード
+Active Storageを利用する（標準でRailsに添付）  
+- `config/environments/development.rb`
+
+および
+- `config/storage.yml`の中にファイルの実体の管理場所の設定を記述
+
+開発環境と運用環境で分けて設定できる
+- 開発環境ではローカルが初期値
+
+### CSV形式で入出力
+
+### ページネーションの実装
+kaminariというGemをつかう
+
+### 非同期処理
+Active Jobという名前のフレームワークがある
