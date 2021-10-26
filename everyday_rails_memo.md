@@ -31,3 +31,57 @@ describeとcontextはエイリアスでありどちらを用いても動作は�
   - 全テストの前に1回だけ実行
 - before(:suite)
   - テスト全体（全ファイル）の前に1回だけ実行
+
+## Factory Bot
+PORO(plain old Ruby objects)ごく普通のRubyオブジェクト
+ジェネレータを使用したファクトリファイルの作成
+- `bin/rails g factory_bot:model user`
+
+- FactoryBot.build モデルのインスタンスのみ作成（DBに保存しない）
+- FactoryBot.create データベースに保存までする
+
+### シーケンス
+ファクトリを記述する際に、ユニークにすべき属性に対して設定する。  
+ファクトリから新しいオブジェクトを作成する際に、設定した属性にはカウンタを１ずつ増やしながらユニークな値を登録していく  
+`sequence(:email) { |n| "tester#{n}@example.com" }`
+- Rubyのコードのようにブロックを使い、式展開で変数の値を増加しながら設定してく感じか
+
+### ファクトリの関連
+複数のモデルが関連を持っている場合に、データをそれぞれに作成するのは手間になるが、  
+ファクトリ内で関連する他のファクトリを`association :project`のような形で指定すると、  
+一つのテストデータの作成時に関連するデータも作成してくれる
+
+### ファクトリの継承
+内容の一部が異なるファクトリを複数定義する際に重複なく定義するための方法
+継承元のファクトリ内に継承するファクトリの、変更する部分のみを入れ子の形で定義する
+```ruby
+# 例
+factory :project do
+  name "test"
+  due_on 1.week.from_now
+
+  factory :project_due_yesterday do
+    due_on 1.day.ago
+  end
+end
+```
+
+### トレイト(trait 特性)
+ファクトリの継承と同じく、重複をなくすための方法  
+また、複数のトレイトを組み合わせて複雑なオブジェクトを構築するために使うことができる
+```ruby
+# 例
+factory :project do
+  name "test"
+  due_on 1.week.from_now
+
+  trait :due_yesterday do
+    due_on 1.day.ago
+  end
+end
+```
+トレイトを使う場合は、スペックの書き方が少し変わる
+```ruby
+project = FactoryBot.create(:project, :due_yesterday)
+                                      ^^^^^^^^^^^^^^
+```
